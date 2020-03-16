@@ -33,6 +33,28 @@ public class MainActivity extends AppCompatActivity {
         mp.setVolume(0.5f, 0.5f);
         totalTime = mp.getDuration();
 
+        volumeBar = (SeekBar) findViewById(R.id.volumeBar);
+        volumeBar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        float volumeNum = progress / 100f;
+                        mp.setVolume(volumeNum, volumeNum);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                }
+        );
+
+
 
     }
 
