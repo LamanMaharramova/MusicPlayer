@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="mlistview" type="id" />
+    <item name="textTitle" type="id" />
+    <item name="textDuration" type="id" />
+    <item name="textSinger" type="id" />
+</resources>

@@ -6,13 +6,20 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button playBtn, forwardBtn, backwardBtn;
+    Button playBtn, forwardBtn, backwardBtn, nextBtn, prevBtn;
     SeekBar positionBar;
     SeekBar volumeBar;
     TextView elapsedTimeLabel;
@@ -23,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Handler handler;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playBtn = (Button) findViewById(R.id.playBtn);
         forwardBtn = (Button) findViewById(R.id.forwardBtn);
         backwardBtn = (Button) findViewById(R.id.backwardBtn);
+        nextBtn = (Button) findViewById(R.id.nextBtn);
+        prevBtn = (Button) findViewById(R.id.prevBtn);
         positionBar = findViewById(R.id.positionBar);
         handler = new Handler();
         elapsedTimeLabel = (TextView) findViewById(R.id.elapsedTimeLabel);
@@ -45,27 +56,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         forwardBtn.setOnClickListener(this);
         backwardBtn.setOnClickListener(this);
+        nextBtn.setOnClickListener(this);
 
-//      volumeBar = (SeekBar) findViewById(R.id.volumeBar);
-//        volumeBar.setOnSeekBarChangeListener(
-//                new SeekBar.OnSeekBarChangeListener() {
-//                    @Override
-//                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                        float volumeNum = progress / 100f;
-//                        mp.setVolume(volumeNum, volumeNum);
-//                    }
-//
-//                    @Override
-//                    public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//                    }
-//                }
-//        );
+      volumeBar = (SeekBar) findViewById(R.id.volumeBar);
+        volumeBar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        float volumeNum = progress / 100f;
+                        mp.setVolume(volumeNum, volumeNum);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                }
+        );
 
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -135,11 +147,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
-
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
+    public void onPointerCaptureChanged(boolean hasCapture) { }
 
-    }
+
+
+
+
 }
