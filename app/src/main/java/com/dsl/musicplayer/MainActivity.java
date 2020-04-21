@@ -6,16 +6,9 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -143,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                   elapsedTimeLabel.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(sTime),
                           TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(sTime))) );
                   positionBar.setProgress(sTime);
-                  //handler.postDelayed(UpdateSongTime, 100);
+                  handler.postDelayed(UpdateSongTime, 100);
                   changePositionBar();
               } else {
                   mp.pause();
@@ -164,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    /*private Runnable UpdateSongTime = new Runnable() {
+    private Runnable UpdateSongTime = new Runnable() {
         @Override
         public void run() {
             sTime = mp.getCurrentPosition();
@@ -173,8 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             positionBar.setProgress(sTime);
             hdlr.postDelayed(this, 100);
         }
-    }; Not really working for now
-    */
+    };
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) { }
