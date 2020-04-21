@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                           TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(sTime))) );
                   positionBar.setProgress(sTime);
                   handler.postDelayed(UpdateSongTime, 100);
+                  handler.postDelayed(UpdateSongTimeEnd,100);
                   changePositionBar();
               } else {
                   mp.pause();
@@ -164,6 +165,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             elapsedTimeLabel.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(sTime),
                     TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(sTime))) );
             positionBar.setProgress(sTime);
+            hdlr.postDelayed(this, 100);
+        }
+    };
+
+    private Runnable UpdateSongTimeEnd = new Runnable() {
+        @Override
+        public void run() {
+            eTime = mp.getDuration();
+            sTime = mp.getCurrentPosition();
+            remainingTimeLabel.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(eTime)-TimeUnit.MILLISECONDS.toMinutes(sTime),
+                    (TimeUnit.MILLISECONDS.toSeconds(eTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(eTime)))-((TimeUnit.MILLISECONDS.toSeconds(sTime))-(TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(sTime))))) );
             hdlr.postDelayed(this, 100);
         }
     };
