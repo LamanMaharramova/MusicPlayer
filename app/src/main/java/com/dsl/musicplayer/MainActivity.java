@@ -32,9 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Handler hdlr = new Handler();
     private static int oTime =0, sTime =0, eTime =0, fTime = 5000, bTime = 5000;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
