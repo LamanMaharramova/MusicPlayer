@@ -1,5 +1,6 @@
-chmod +x gradlew
+#!/usr/bin/bash
 
+sudo chmod +x gradlew
 #test
 ./gradlew test
 
