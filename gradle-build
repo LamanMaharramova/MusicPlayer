@@ -1,4 +1,4 @@
-sudo chmod +x gradlew
+chmod +x gradlew
 #test
 ./gradlew test
 
