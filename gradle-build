@@ -1,0 +1,5 @@
+#test
+./gradlew test
+
+#build
+./gradlew assembleDebug
