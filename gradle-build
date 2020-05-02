@@ -1,3 +1,5 @@
+chmod +x gradlew
+
 #test
 ./gradlew test
 
