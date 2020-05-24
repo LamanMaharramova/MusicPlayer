@@ -106,7 +106,7 @@ public class Main2Activity extends AppCompatActivity {
 
         }
 
-        SimpleAdapter adapter = new SimpleAdapter(this, songsMap, R.layout.song,
+        SimpleAdapter adapter = new SimpleAdapter(this, songsMap, R.layout.activity_main2,
                 new String[]{"title", "duration", "singer"},
                 new int[]{R.id.textTitle, R.id.textDuration, R.id.textSinger});
 

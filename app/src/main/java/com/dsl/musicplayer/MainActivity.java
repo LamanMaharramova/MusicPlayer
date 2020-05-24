@@ -6,16 +6,10 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,21 +22,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int totalTime;
     Runnable runnable;
     Handler handler;
-
-
-
+    private Handler hdlr = new Handler();
+    private static int oTime =0, sTime =0, eTime =0, fTime = 5000, bTime = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         playBtn = (Button) findViewById(R.id.playBtn);
         forwardBtn = (Button) findViewById(R.id.forwardBtn);
         backwardBtn = (Button) findViewById(R.id.backwardBtn);
         nextBtn = (Button) findViewById(R.id.nextBtn);
         prevBtn = (Button) findViewById(R.id.prevBtn);
-        positionBar = findViewById(R.id.positionBar);
+        positionBar = (SeekBar) findViewById(R.id.positionBar);
         handler = new Handler();
         elapsedTimeLabel = (TextView) findViewById(R.id.elapsedTimeLabel);
         remainingTimeLabel = (TextView) findViewById(R.id.remainingTimeLabel);
@@ -59,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nextBtn.setOnClickListener(this);
 
       volumeBar = (SeekBar) findViewById(R.id.volumeBar);
+
         volumeBar.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
                     @Override
@@ -127,13 +122,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void playBtnClick(View view) {
         if (!mp.isPlaying()) {
-            mp.start();
-            playBtn.setBackgroundResource(R.drawable.stop);
-            changePositionBar();
-        } else {
-            mp.pause();
-            playBtn.setBackgroundResource(R.drawable.play);
-        }
+                  mp.start();
+                  playBtn.setBackgroundResource(R.drawable.stop);
+                  eTime = mp.getDuration();
+                  sTime = mp.getCurrentPosition();
+                  if(oTime == 0){
+                      positionBar.setMax(eTime);
+                      oTime =1;
+                  }
+
+                  remainingTimeLabel.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(eTime),
+                          TimeUnit.MILLISECONDS.toSeconds(eTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(eTime))) );
+                  elapsedTimeLabel.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(sTime),
+                          TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS. toMinutes(sTime))) );
+                  positionBar.setProgress(sTime);
+                  handler.postDelayed(UpdateSongTime, 100);
+                  handler.postDelayed(UpdateSongTimeEnd,100);
+                  changePositionBar();
+              } else {
+                  mp.pause();
+                  playBtn.setBackgroundResource(R.drawable.play);
+              }
     }
 
     @Override
@@ -148,6 +157,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    private Runnable UpdateSongTime = new Runnable() {
+        @Override
+        public void run() {
+            sTime = mp.getCurrentPosition();
+            elapsedTimeLabel.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(sTime),
+                    TimeUnit.MILLISECONDS.toSeconds(sTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(sTime))) );
+            positionBar.setProgress(sTime);
+            hdlr.postDelayed(this, 100);
+        }
+    };
+
+    private Runnable UpdateSongTimeEnd = new Runnable() {
+        @Override
+        public void run() {
+            eTime = mp.getDuration();
+            sTime = mp.getCurrentPosition();
+            remainingTimeLabel.setText(String.format("%d:%d", TimeUnit.MILLISECONDS.toMinutes(eTime)-TimeUnit.MILLISECONDS.toMinutes(sTime),
+                    (TimeUnit.MILLISECONDS.toSeconds(eTime) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(eTime)))-((TimeUnit.MILLISECONDS.toSeconds(sTime))-(TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(sTime))))) );
+            hdlr.postDelayed(this, 100);
+        }
+    };
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) { }

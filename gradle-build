@@ -1,0 +1,6 @@
+chmod +x gradlew
+#test
+./gradlew test
+
+#build
+./gradlew assembleDebug
